@@ -108,6 +108,7 @@ void Floodfill::setWall(int x, int y, Direction dir) {
     }
 }
 
+
 // Check if a wall exists at a specific location and direction
 bool Floodfill::isWall(int x, int y, Direction dir) {
     if (x < 0 || y < 0 || x >= MAZE_SIZE || y >= MAZE_SIZE) return true;
@@ -124,7 +125,7 @@ void Floodfill::floodFill(int goalX, int goalY) {
     }
     
     // Use queue for breadth-first search
-    QueueArray<Cell> queue;
+    QueueArray<Cell> queue(100);
     
     // Start from the goal
     distance[goalX][goalY] = 0;
@@ -132,7 +133,7 @@ void Floodfill::floodFill(int goalX, int goalY) {
     
     // Breadth-first fill of distances
     while (!queue.isEmpty()) {
-        Cell current = queue.front();
+        Cell current = queue.peek();
         queue.pop();
         
         // Check all four neighboring cells

@@ -4,9 +4,9 @@
 
 #include <Arduino.h>
 #include <VL53L0X.h>
-#include "MotorController.h"
-#include "LaneCentering.h"
-#include "PIDController.h"
+#include "motor_cntrl.h"
+#include "lanecentering.h"
+#include "PIDcntrl.h"
 #include <QueueArray.h> // Available in the Arduino library manager
 
 // Maze size definition - standard micromouse maze is 16x16

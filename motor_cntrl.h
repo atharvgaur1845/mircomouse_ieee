@@ -1,34 +1,42 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
-#include "config.h"
-
 class MotorController {
 private:
-    const int pwm, in1, in2;
-    
+    int pwmPin;
+    int in1Pin;
+    int in2Pin;
+    float currentPower;
+
 public:
-    MotorController(int pwmPin, int in1Pin, int in2Pin) : 
-        pwm(pwmPin), in1(in1Pin), in2(in2Pin) {
-        pinMode(pwm, OUTPUT);
-        pinMode(in1, OUTPUT);
-        pinMode(in2, OUTPUT);
+    MotorController(int pwm, int in1, int in2) : pwmPin(pwm), in1Pin(in1), in2Pin(in2), currentPower(0) {
+        pinMode(pwmPin, OUTPUT);
+        pinMode(in1Pin, OUTPUT);
+        pinMode(in2Pin, OUTPUT);
     }
 
     void setPower(float power) {
-        bool direction = power >= 0;
-        power = constrain(fabs(power), 30, 255);
-        
-        digitalWrite(in1, direction ? HIGH : LOW);
-        digitalWrite(in2, direction ? LOW : HIGH);
-        analogWrite(pwm, power);
+        currentPower = power;
+        if (power > 0) {
+            digitalWrite(in1Pin, HIGH);
+            digitalWrite(in2Pin, LOW);
+        } else if (power < 0) {
+            digitalWrite(in1Pin, LOW);
+            digitalWrite(in2Pin, HIGH);
+        } else {
+            digitalWrite(in1Pin, LOW);
+            digitalWrite(in2Pin, LOW);
+        }
+        analogWrite(pwmPin, abs(power) * 255);
     }
 
-    void brake() {
-        digitalWrite(in1, LOW);
-        digitalWrite(in2, LOW);
-        analogWrite(pwm, 0);
+    float getCurrentPower() {
+        return currentPower;
+    }
+
+    void stop() {
+        setPower(0);
     }
 };
 
-#endif
+#endif // MOTOR_CONTROLLER_H
